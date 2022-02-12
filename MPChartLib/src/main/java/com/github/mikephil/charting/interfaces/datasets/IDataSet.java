@@ -1,7 +1,6 @@
 package com.github.mikephil.charting.interfaces.datasets;
 
 import android.graphics.DashPathEffect;
-import android.graphics.PointF;
 import android.graphics.Typeface;
 
 import com.github.mikephil.charting.components.Legend;
@@ -55,6 +54,9 @@ public interface IDataSet<T extends Entry> {
      * @return
      */
     int getEntryCount();
+
+    void setEntries(List<T> entries);
+    List<T> getEntries();
 
     /**
      * Calculates the minimum and maximum x and y values (mXMin, mXMax, mYMin, mYMax).

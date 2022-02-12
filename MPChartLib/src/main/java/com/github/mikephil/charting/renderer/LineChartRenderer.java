@@ -329,9 +329,12 @@ public class LineChartRenderer extends LineRadarRenderer {
 
             int max = mXBounds.min + mXBounds.range;
 
+            List<Entry> entries = dataSet.getEntries().subList(mXBounds.min, mXBounds.max + 1);
+
+            float[] mLineBuffer = this.mLineBuffer;
             for (int j = mXBounds.min; j < max; j++) {
 
-                Entry e = dataSet.getEntryForIndex(j);
+                Entry e = entries.get(j);
                 if (e == null) continue;
 
                 mLineBuffer[0] = e.getX();
@@ -339,7 +342,7 @@ public class LineChartRenderer extends LineRadarRenderer {
 
                 if (j < mXBounds.max) {
 
-                    e = dataSet.getEntryForIndex(j + 1);
+                    e = entries.get(j + 1);
 
                     if (e == null) break;
 
@@ -390,8 +393,9 @@ public class LineChartRenderer extends LineRadarRenderer {
 
         } else { // only one color per dataset
 
-            if (mLineBuffer.length < Math.max((entryCount) * pointsPerEntryPair, pointsPerEntryPair) * 2)
-                mLineBuffer = new float[Math.max((entryCount) * pointsPerEntryPair, pointsPerEntryPair) * 4];
+            int length = Math.max((entryCount) * pointsPerEntryPair, pointsPerEntryPair) * 2;
+            if (mLineBuffer.length < length)
+                mLineBuffer = new float[length];
 
             Entry e1, e2;
 
@@ -399,11 +403,16 @@ public class LineChartRenderer extends LineRadarRenderer {
 
             if (e1 != null) {
 
-                int j = 0;
-                for (int x = mXBounds.min; x <= mXBounds.range + mXBounds.min; x++) {
+                int max = mXBounds.min + mXBounds.range;
 
-                    e1 = dataSet.getEntryForIndex(x == 0 ? 0 : (x - 1));
-                    e2 = dataSet.getEntryForIndex(x);
+                List<Entry> entries = dataSet.getEntries().subList(mXBounds.min, mXBounds.max + 1);
+
+                int j = 0;
+                float[] mLineBuffer = this.mLineBuffer;
+                for (int x = mXBounds.min; x <= max; x++) {
+
+                    e1 = entries.get(x == 0 ? 0 : (x - 1));
+                    e2 = entries.get(x);
 
                     if (e1 == null || e2 == null) continue;
 
